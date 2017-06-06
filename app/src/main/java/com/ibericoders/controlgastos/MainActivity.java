@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     //Enviar el archivo por email
 
                     //Obtener localizacion
-                    File filelocation = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), filename);
+                    File filelocation = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Ibericoders/", filename);
                     Uri path = Uri.fromFile(filelocation);
                     Intent emailIntent = new Intent(Intent.ACTION_SEND);
                     // Indicar que vas a mandar un email
