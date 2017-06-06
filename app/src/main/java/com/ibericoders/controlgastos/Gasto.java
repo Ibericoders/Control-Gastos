@@ -1,15 +1,15 @@
 package com.ibericoders.controlgastos;
 
 /**
- * Created by Jorge on 04/06/2017.
+ * Created by Jorge R on 04/06/2017.
  */
 
 public class Gasto {
 
-    String nombre;
-    String descripcion;
-    double cantidad;
-    String fecha;
+    private String nombre;
+    private String descripcion;
+    private double cantidad;
+    private String fecha;
 
     public Gasto(String nombre, String descripcion, double cantidad, String fecha) {
         this.nombre = nombre;
@@ -48,5 +48,10 @@ public class Gasto {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    @Override
+    public String toString() {
+        return nombre+"|"+descripcion+"|"+cantidad+"|"+fecha;
     }
 }

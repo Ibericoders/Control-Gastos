@@ -7,6 +7,13 @@
     tools:context="com.ibericoders.controlgastos.MainActivity">
 
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="exportar"
+        android:text="Exportar" />
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

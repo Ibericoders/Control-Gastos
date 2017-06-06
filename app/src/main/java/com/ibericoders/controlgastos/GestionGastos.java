@@ -7,13 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 /**
- * Created by Jorge on 04/06/2017.
+ * Created by Jorge R on 04/06/2017.
  */
 
 public class GestionGastos {
 
-    Ayudante helper;
-    SQLiteDatabase db;
+    private Ayudante helper;
+    private SQLiteDatabase db;
     public GestionGastos(Context ctx){
         //Creación objeto ayudante y obtención de la base de datos
         helper=new Ayudante(ctx,"datos",1);
@@ -35,6 +35,7 @@ public class GestionGastos {
         while(c.moveToNext()){
             res=true;
         }
+        c.close();
         return res;
     }
 
@@ -46,6 +47,7 @@ public class GestionGastos {
             Gasto g=new Gasto(c.getString(1),c.getString(2),Double.parseDouble(c.getString(3)),c.getString(4));
             gastos.add(g);
         }
+        c.close();
         return gastos;
     }
 
@@ -56,6 +58,7 @@ public class GestionGastos {
         while(c.moveToNext()){
             g=new Gasto(c.getString(1),c.getString(2),Double.parseDouble(c.getString(3)),c.getString(4));
         }
+        c.close();
         return g;
     }
 
