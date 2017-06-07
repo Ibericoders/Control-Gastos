@@ -11,7 +11,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="exportar"
+        android:onClick="empezarProceso"
         android:text="Exportar" />
 
     <ScrollView
@@ -45,4 +45,51 @@
         android:onClick="nuevo"
         app:fabSize="normal"
         app:srcCompat="@android:drawable/ic_input_add" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_exportar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edt_emailExportar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="exportar"
+                android:text="Exportar" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>

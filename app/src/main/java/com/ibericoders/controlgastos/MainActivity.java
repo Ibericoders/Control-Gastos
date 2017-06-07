@@ -16,8 +16,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,14 +34,18 @@ public class MainActivity extends AppCompatActivity {
     ListView gastos;
     ArrayList<Gasto> datos;
     GestionGastos ggastos;
+    CardView exportar;
+    EditText em_exp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Mostrar datos en ListView
+        //Referencias a objetos
         gastos=(ListView)this.findViewById(R.id.listagastos);
+        exportar=(CardView)this.findViewById(R.id.cv_exportar);
+        em_exp=(EditText)this.findViewById(R.id.edt_emailExportar);
     }
 
     @Override
@@ -53,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         //Mostrar datos en ListView
         ListadoAdapter adapter=new ListadoAdapter(this,datos);
         gastos.setAdapter(adapter);
+
+        //Ocultar tarjeta exportar
+        exportar.setVisibility(View.GONE);
 
     }
 
@@ -74,15 +83,27 @@ public class MainActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
+    public void empezarProceso(View v){
+        exportar.setVisibility(View.VISIBLE);
+    }
     public void exportar(View v){
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
-            Exportar exportar=new Exportar();
-            exportar.execute();
-        }else{
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10);
+
+        String email=em_exp.getText().toString();
+        if(email.contains("@") && email.endsWith(".com")){
+            if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+                Exportar exportar=new Exportar();
+                exportar.execute(email);
+            }else{
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10);
+            }
+        }else {
+            Toast.makeText(this, "Email no valido", Toast.LENGTH_LONG).show();
+            em_exp.setText("");
         }
 
     }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -102,9 +123,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class Exportar extends AsyncTask<Void,Void,String>{
+    private class Exportar extends AsyncTask<String,Void,String>{
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(String... params) {
             if(Build.VERSION.SDK_INT>24){
                 //Comprobar si se puede acceder al almacenaje externo.
                 if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
@@ -138,11 +159,11 @@ public class MainActivity extends AppCompatActivity {
                     //Obtener localizacion
                     File filelocation = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/Ibericoders/", filename);
                     Uri path = Uri.fromFile(filelocation);
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
                     // Indicar que vas a mandar un email
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
                     emailIntent .setType("vnd.android.cursor.dir/email");
                     //Recipientes del email
-                    String to[] = {"jroldanreal@gmail.com"};
+                    String to[] = {"ibericoders@gmail.com",params[0]};
                     emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
                     // Añadir el adjunto
                     emailIntent .putExtra(Intent.EXTRA_STREAM, path);
