@@ -12,12 +12,11 @@ import java.util.ArrayList;
 
 public class GestionGastos {
 
-    private Ayudante helper;
     private SQLiteDatabase db;
     public GestionGastos(Context ctx){
         //Creación objeto ayudante y obtención de la base de datos
-        helper=new Ayudante(ctx,"datos",1);
-        db=helper.getWritableDatabase();
+        Ayudante helper = new Ayudante(ctx, "datos", 1);
+        db= helper.getWritableDatabase();
     }
 
     public void guardarNuevoGasto(Gasto g){
