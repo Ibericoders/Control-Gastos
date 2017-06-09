@@ -82,7 +82,19 @@
             android:inputType="none"
             android:paddingLeft="16sp"
             android:paddingRight="10sp" />
+
     </android.support.design.widget.TextInputLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_weight="1" />
+
+    <Spinner
+        android:id="@+id/sp_categoriaGasto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog" />
 
     <Space
         android:layout_width="match_parent"

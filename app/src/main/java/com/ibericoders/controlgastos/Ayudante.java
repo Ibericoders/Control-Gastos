@@ -25,7 +25,7 @@ public class Ayudante extends SQLiteOpenHelper{
         //Se le llama para construir las tablas de la base de datos.
         //Instruccion SQL de creacion de la tabla de gastos.
         String sqlCrearTabla1="create table gastos (_id integer primary key autoincrement,";
-        sqlCrearTabla1+="nombre text,descripcion text,cantidad double,fecha text)";
+        sqlCrearTabla1+="nombre text,descripcion text,cantidad double,fecha text,categoria text)";
         //Ejecutar la instrucción 1.
         db.execSQL(sqlCrearTabla1);
     }

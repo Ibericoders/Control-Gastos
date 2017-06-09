@@ -1,6 +1,7 @@
 package com.ibericoders.controlgastos;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
@@ -11,15 +12,18 @@ import android.os.Environment;
 import android.os.Parcel;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     GestionGastos ggastos;
     CardView exportar;
     EditText em_exp;
+    TextView filtro;
     int CHOOSE_FILE_REQUESTCODE=15;
 
     @Override
@@ -49,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         gastos=(ListView)this.findViewById(R.id.listagastos);
         exportar=(CardView)this.findViewById(R.id.cv_exportar);
         em_exp=(EditText)this.findViewById(R.id.edt_emailExportar);
+        filtro=(TextView)this.findViewById(R.id.tv_filtroGasto);
+        filtro.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -93,6 +100,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
+            case R.id.filtrar:
+                showDialogMenu();
+                new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        showDialogMenu();
+                        Log.d("Dialog used.","here");
+                    }
+                }; break;
             case R.id.importar:
                 importar();
                 break;
@@ -101,6 +117,28 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public void showDialogMenu(){
+        final String[] categorias=new String[]{"Cat1","Cat2","Cat3","Cat4","Cat5"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Selecciona la categoría de filtro");
+        builder.setItems(categorias, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //Activar textview con nombre categoria
+                filtro.setText("Filtro activado: "+categorias[which]);
+                filtro.setVisibility(View.VISIBLE);
+                //Cambiar adapter del listview
+                //Obtener datos
+                ggastos=new GestionGastos(MainActivity.this);
+                datos=ggastos.obtenerGastosCategoria(categorias[which]);
+
+                //Mostrar datos en ListView
+                ListadoAdapter adapter=new ListadoAdapter(MainActivity.this,datos);
+                gastos.setAdapter(adapter);
+            }
+        });
+        builder.show();
     }
 
     public void nuevo(View v){
@@ -158,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 while ((linea = bf.readLine()) != null) {
                     totalGastos++;
                     String[] g = linea.split("[|]");
-                    Gasto gasto = new Gasto(g[0], g[1], Double.parseDouble(g[2]), g[3]);
+                    Gasto gasto = new Gasto(g[0], g[1], Double.parseDouble(g[2]), g[3],g[4]);
                     if(!ggastos.comprobarGasto(gasto.getNombre())){
                         ggastos.guardarNuevoGasto(gasto);
                         gastosAnadidos++;

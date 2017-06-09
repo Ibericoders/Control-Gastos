@@ -10,12 +10,14 @@ public class Gasto {
     private String descripcion;
     private double cantidad;
     private String fecha;
+    private String categoria;
 
-    public Gasto(String nombre, String descripcion, double cantidad, String fecha) {
+    public Gasto(String nombre, String descripcion, double cantidad, String fecha, String categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.cantidad = cantidad;
         this.fecha = fecha;
+        this.categoria = categoria;
     }
 
     public String getNombre() {
@@ -48,6 +50,14 @@ public class Gasto {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     @Override

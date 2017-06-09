@@ -56,6 +56,10 @@ public class ListadoAdapter extends BaseAdapter {
         TextView tvFecha=(TextView)convertView.findViewById(R.id.tv_fechaGasto);
         tvFecha.setText(datos.get(position).getFecha());
 
+        //Categoría Gasto
+        TextView tvCat=(TextView)convertView.findViewById(R.id.tv_categoriaGasto);
+        tvCat.setText(datos.get(position).getCategoria());
+
         //Devolver el view de la fila
         return convertView;
     }

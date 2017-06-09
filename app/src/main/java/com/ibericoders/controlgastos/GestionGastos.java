@@ -21,8 +21,8 @@ public class GestionGastos {
 
     public void guardarNuevoGasto(Gasto g){
         if(!comprobarGasto(g.getNombre())){
-            String sql="insert into gastos (nombre,descripcion,cantidad,fecha) ";
-            sql+="values ('"+g.getNombre()+"','"+g.getDescripcion()+"',"+g.getCantidad()+",'"+g.getFecha()+"')";
+            String sql="insert into gastos (nombre,descripcion,cantidad,fecha,categoria) ";
+            sql+="values ('"+g.getNombre()+"','"+g.getDescripcion()+"',"+g.getCantidad()+",'"+g.getFecha()+"','"+g.getCategoria()+"')";
             db.execSQL(sql);
         }
     }
@@ -43,7 +43,19 @@ public class GestionGastos {
         Cursor c= db.rawQuery(sql,null);
         ArrayList<Gasto>gastos=new ArrayList<>();
         while(c.moveToNext()){
-            Gasto g=new Gasto(c.getString(1),c.getString(2),Double.parseDouble(c.getString(3)),c.getString(4));
+            Gasto g=new Gasto(c.getString(1),c.getString(2),Double.parseDouble(c.getString(3)),c.getString(4),c.getString(5));
+            gastos.add(g);
+        }
+        c.close();
+        return gastos;
+    }
+
+    public ArrayList<Gasto> obtenerGastosCategoria(String cat){
+        String sql="select * from gastos where categoria='"+cat+"'";
+        Cursor c= db.rawQuery(sql,null);
+        ArrayList<Gasto>gastos=new ArrayList<>();
+        while(c.moveToNext()){
+            Gasto g=new Gasto(c.getString(1),c.getString(2),Double.parseDouble(c.getString(3)),c.getString(4),c.getString(5));
             gastos.add(g);
         }
         c.close();
@@ -55,7 +67,7 @@ public class GestionGastos {
         Cursor c= db.rawQuery(sql,null);
         Gasto g=null;
         while(c.moveToNext()){
-            g=new Gasto(c.getString(1),c.getString(2),Double.parseDouble(c.getString(3)),c.getString(4));
+            g=new Gasto(c.getString(1),c.getString(2),Double.parseDouble(c.getString(3)),c.getString(4),c.getString(5));
         }
         c.close();
         return g;
