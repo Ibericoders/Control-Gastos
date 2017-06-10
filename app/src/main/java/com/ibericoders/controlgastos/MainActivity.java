@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Parcel;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     GestionGastos ggastos;
     CardView exportar;
     EditText em_exp;
-    TextView filtro;
+    TextView filtro,tvfab2,tvfab3;
+    FloatingActionButton fab1,fab2,fab3;
     int CHOOSE_FILE_REQUESTCODE=15;
 
     @Override
@@ -55,7 +57,16 @@ public class MainActivity extends AppCompatActivity {
         exportar=(CardView)this.findViewById(R.id.cv_exportar);
         em_exp=(EditText)this.findViewById(R.id.edt_emailExportar);
         filtro=(TextView)this.findViewById(R.id.tv_filtroGasto);
-        filtro.setVisibility(View.INVISIBLE);
+        filtro.setVisibility(View.GONE);
+        fab1=(FloatingActionButton)this.findViewById(R.id.fabPrincipal);
+        fab2=(FloatingActionButton)this.findViewById(R.id.fabsub1);
+        fab2.setVisibility(View.GONE);
+        fab3=(FloatingActionButton)this.findViewById(R.id.fabsub2);
+        fab3.setVisibility(View.GONE);
+        tvfab2=(TextView)this.findViewById(R.id.tv_fabsub1);
+        tvfab2.setVisibility(View.GONE);
+        tvfab3=(TextView)this.findViewById(R.id.tv_fabsub2);
+        tvfab3.setVisibility(View.GONE);
     }
 
     @Override
@@ -144,6 +155,31 @@ public class MainActivity extends AppCompatActivity {
     public void nuevo(View v){
         Intent intent=new Intent(this,NuevoGastoActivity.class);
         this.startActivity(intent);
+    }
+
+    public void desplegar(View v){
+        //Filtro de pulsaciones(Abrir/Cerrar)
+        if(fab2.getVisibility()==View.GONE){
+            //Activar dos subbotones/textos
+            fab2.setVisibility(View.VISIBLE);
+            fab3.setVisibility(View.VISIBLE);
+            tvfab2.setVisibility(View.VISIBLE);
+            tvfab3.setVisibility(View.VISIBLE);
+            //Cambiar imagen boton principal
+            fab1.setImageResource(R.drawable.ic_cerrar);
+            //Oscurecer pantalla
+        }else if(fab2.getVisibility()==View.VISIBLE){
+            //Volver al inicio
+            //Desactivar dos subbotones/textos
+            fab2.setVisibility(View.GONE);
+            fab3.setVisibility(View.GONE);
+            tvfab2.setVisibility(View.GONE);
+            tvfab3.setVisibility(View.GONE);
+            //Cambiar imagen boton principal
+            fab1.setImageResource(R.drawable.ic_anadir);
+
+        }
+
     }
 
     public void empezarProceso(){

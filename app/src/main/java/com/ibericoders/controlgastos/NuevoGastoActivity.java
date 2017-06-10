@@ -2,20 +2,15 @@ package com.ibericoders.controlgastos;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
-import android.database.DataSetObserver;
 import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class NuevoGastoActivity extends AppCompatActivity {
@@ -39,14 +34,13 @@ public class NuevoGastoActivity extends AppCompatActivity {
         fecha=(EditText)this.findViewById(R.id.edt_fechaGasto);
         sp=(Spinner)this.findViewById(R.id.sp_categoriaGasto);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"Cat1","Cat2","Cat3","Cat4","Cat5"});
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"Seleccione categoría...","Cat1","Cat2","Cat3","Cat4","Cat5"});
         sp.setAdapter(adapter);
 
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cat=parent.getSelectedItem().toString();
-                Toast.makeText(NuevoGastoActivity.this,parent.getSelectedItem().toString(),Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -82,7 +76,7 @@ public class NuevoGastoActivity extends AppCompatActivity {
         this.finish();
     }
     public void guardar(View v){
-        if(nombre.getText().length()>0 && descripcion.getText().length()>0 && cantidad.getText().length()>0 && fecha.getText().length()>0 && cat!=null){
+        if(nombre.getText().length()>0 && descripcion.getText().length()>0 && cantidad.getText().length()>0 && fecha.getText().length()>0 && cat!=null && !cat.equals("Seleccione categoría...")){
             Gasto g=new Gasto(nombre.getText().toString(),descripcion.getText().toString(),Double.parseDouble(cantidad.getText().toString()),fecha.getText().toString(),cat);
             if(!ggastos.comprobarGasto(g.getNombre())){
                 ggastos.guardarNuevoGasto(g);
