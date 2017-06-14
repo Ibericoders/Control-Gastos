@@ -1,8 +1,10 @@
 package com.ibericoders.controlgastos;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.net.Uri;
@@ -17,12 +19,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     GestionGastos ggastos;
     CardView exportar;
     EditText em_exp;
-    TextView filtro,tvfab2,tvfab3;
+    TextView filtro,tvfab2,tvfab3,bote;
     FloatingActionButton fab1,fab2,fab3;
     int CHOOSE_FILE_REQUESTCODE=15;
 
@@ -67,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
         tvfab2.setVisibility(View.GONE);
         tvfab3=(TextView)this.findViewById(R.id.tv_fabsub2);
         tvfab3.setVisibility(View.GONE);
+        bote=(TextView)this.findViewById(R.id.tv_valorBote);
+
+        SharedPreferences prefs=getSharedPreferences("bote", Context.MODE_PRIVATE);
+        if(prefs.getString("bote","null").equals("null")){
+            bote.setText("Valor del bote: 0 €.");
+        }else{
+            bote.setText("Valor del bote: "+prefs.getString("bote",null)+" €.");
+        }
     }
 
     @Override
@@ -84,6 +96,13 @@ public class MainActivity extends AppCompatActivity {
         //Ocultar tarjeta exportar
         exportar.setVisibility(View.GONE);
 
+        SharedPreferences prefs=getSharedPreferences("bote", Context.MODE_PRIVATE);
+        if(prefs.getString("bote","null").equals("null")){
+            bote.setText("Valor del bote: 0 €.");
+        }else{
+            bote.setText("Valor del bote: "+prefs.getString("bote",null)+" €.");
+        }
+
     }
 
     @Override
@@ -97,6 +116,13 @@ public class MainActivity extends AppCompatActivity {
         //Mostrar datos en ListView
         ListadoAdapter adapter=new ListadoAdapter(this,datos);
         gastos.setAdapter(adapter);
+
+        SharedPreferences prefs=getSharedPreferences("bote", Context.MODE_PRIVATE);
+        if(prefs.getString("bote","null").equals("null")){
+            bote.setText("Valor del bote: 0 €.");
+        }else{
+            bote.setText("Valor del bote: "+prefs.getString("bote",null)+" €.");
+        }
     }
 
     @Override
@@ -180,6 +206,52 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public void anadir(View v){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Añadir dinero al bote");
+        alertDialog.setMessage("Introduce la cantidad a añadir");
+
+        final EditText input = new EditText(MainActivity.this);
+        input.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+
+        alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                double cantidad=Double.parseDouble(input.getText().toString());
+                SharedPreferences prefs=getSharedPreferences("bote", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=prefs.edit();
+                if(prefs.getString("bote","null").equals("null")){
+                    editor.remove("bote");
+                    editor.putString("bote",String.valueOf(cantidad));
+                    bote.setText("Valor del bote: "+String.valueOf(cantidad)+" €.");
+                }else{
+                    String anterior=prefs.getString("bote",null);
+                    double valorAnterior=Double.parseDouble(anterior);
+                    String res=String.valueOf(valorAnterior+cantidad);
+                    editor.remove("bote");
+                    editor.putString("bote",res);
+                    bote.setText("Valor del bote: "+res+" €.");
+                }
+                editor.apply();
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.show();
     }
 
     public void empezarProceso(){

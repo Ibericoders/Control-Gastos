@@ -21,6 +21,16 @@
             android:text="TextView"
             android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/tv_valorBote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16sp"
+            android:paddingRight="10sp"
+            android:text="Valor del bote: "
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -100,6 +110,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
+        android:onClick="anadir"
         app:fabSize="mini"
         app:srcCompat="@drawable/ic_anadir" />
 

@@ -2,6 +2,8 @@ package com.ibericoders.controlgastos;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -81,6 +83,19 @@ public class NuevoGastoActivity extends AppCompatActivity {
             if(!ggastos.comprobarGasto(g.getNombre())){
                 ggastos.guardarNuevoGasto(g);
                 Toast.makeText(this, "Gasto introducido correctamente", Toast.LENGTH_LONG).show();
+
+                SharedPreferences prefs=getSharedPreferences("bote", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=prefs.edit();
+                if(prefs.getString("bote","null").equals("null")){
+                    editor.remove("bote");
+                    editor.putString("bote","-"+String.valueOf(g.getCantidad()));
+                }else{
+                    double valorAnterior=Double.parseDouble(prefs.getString("bote",null));
+                    String res=String.valueOf(valorAnterior-g.getCantidad());
+                    editor.remove("bote");
+                    editor.putString("bote",res);
+                }
+                editor.apply();
                 this.finish();
             }else{
                 Toast.makeText(this, "Gasto ya introducido", Toast.LENGTH_LONG).show();
